@@ -3,6 +3,7 @@ package org.dnu.samoylov.websocket.client.client.task;
 
 import javafx.concurrent.Task;
 import org.dnu.samoylov.websocket.client.client.HelloClientEndpoint;
+import org.dnu.samoylov.websocket.common.StaticData;
 import org.glassfish.tyrus.client.ClientManager;
 
 import javax.websocket.DeploymentException;
@@ -17,7 +18,7 @@ public class ConnectionTask extends Task<HelloClientEndpoint> {
 
     public ConnectionTask(String serverHost, String username) {
         this.username = username;
-        SERVER_ENDPOINT_ADDRESS = serverHost + "/hello";
+        SERVER_ENDPOINT_ADDRESS = StaticData.getServerAdress(serverHost) + StaticData.REGION_PATH;
     }
 
 

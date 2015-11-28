@@ -2,6 +2,7 @@ package org.dnu.samoylov.websocket.client.client;
 
 import javafx.concurrent.WorkerStateEvent;
 import org.dnu.samoylov.websocket.client.client.task.ConnectionTask;
+import org.dnu.samoylov.websocket.common.msginteraction.message.LoginMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,10 @@ public class ClientService {
 
     public void sendText(String text) {
         clientEndpoint.sendText(text);
+    }
+
+    public void sendObject(Object object) {
+        clientEndpoint.sendObject(object);
     }
 
 

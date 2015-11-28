@@ -1,5 +1,7 @@
 package org.dnu.samoylov.websocket.client.client;
 
+import org.dnu.samoylov.websocket.common.msginteraction.generic.Message;
+import org.dnu.samoylov.websocket.common.msginteraction.message.LoginMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,14 +40,10 @@ public class HelloClientEndpoint {
 
     @OnOpen
     public void onOpen(Session session) {
-        try {
             this.session = session;
             log.debug("Sending request: '" + login + "' with session " + session.getId());
 
-            session.getBasicRemote().sendText(login);
-        } catch (IOException e) {
-            log.error("Unable to connect to hello server: ", e);
-        }
+            sendObject(new LoginMessage(login));
     }
 
     @OnMessage
@@ -71,6 +69,14 @@ public class HelloClientEndpoint {
     @OnClose
     public void onClose(Session session) {
             this.session = null;
+    }
+
+    public void sendObject(Object obj) {
+        try {
+            this.session.getBasicRemote().sendText(Message.toStringMessage(obj));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendText(String text) {

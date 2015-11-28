@@ -11,5 +11,7 @@
 
     <artifactId>server</artifactId>
 
-
+    <build>
+        <finalName>webgame-server</finalName>
+    </build>
 </project>

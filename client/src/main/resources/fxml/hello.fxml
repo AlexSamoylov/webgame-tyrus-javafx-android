@@ -6,7 +6,7 @@
 <?import org.tbee.javafx.scene.layout.fxml.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="rootPane" prefHeight="153.0" prefWidth="281.0" styleClass="main-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dnu.samoylov.websocket.client.HelloController">
+<AnchorPane id="rootPane" prefHeight="153.0" prefWidth="281.0" styleClass="main-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.dnu.samoylov.websocket.client.mvp.ClientViewController">
    <children>
    
        <Label layoutX="14.0" layoutY="28.0" text="ip" /> <TextField fx:id="ip" layoutX="50.0" layoutY="24.0" prefColumnCount="30" prefHeight="25.0" prefWidth="208.0" promptText="ip" text="localhost" />

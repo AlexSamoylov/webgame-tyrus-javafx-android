@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <logger name="org.jewelsea">
+    <logger name="org.dnu.samoylov">
         <level value="DEBUG"/>
     </logger>
 

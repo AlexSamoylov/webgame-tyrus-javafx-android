@@ -1,4 +1,4 @@
-package org.dnu.samoylov.websocket.client;
+package org.dnu.samoylov.websocket.client.mvp;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,11 +8,7 @@ import org.dnu.samoylov.websocket.client.client.ClientService;
 /**
  * FXML controller for the application.
  */
-public class HelloController {
-
-
-    private static final String DEFAULT_NAME = "mysterious person";
-
+public class ClientViewController {
     @FXML
     private TextField login;
 
@@ -23,6 +19,12 @@ public class HelloController {
     private Label messageLabel;
 
     ClientService clientService = new ClientService();
+
+    public ClientViewController() {
+        ClientPresenter.getInstance().setViewController(this);
+        ClientPresenter.getInstance().setClientService(clientService);
+
+    }
 
     /**
      * Event handler invoked when the user submits their name.
