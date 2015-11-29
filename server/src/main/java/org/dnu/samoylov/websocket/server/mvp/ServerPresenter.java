@@ -5,17 +5,21 @@ import org.dnu.samoylov.websocket.common.UserInfo;
 import org.dnu.samoylov.websocket.common.msginteraction.UserInfoHelper;
 import org.dnu.samoylov.websocket.common.msginteraction.message.FinishGame;
 import org.dnu.samoylov.websocket.common.msginteraction.message.LoginIndicatorMsg;
+import org.dnu.samoylov.websocket.server.server.ServerController;
 import org.dnu.samoylov.websocket.server.server.ServerEndpoint;
 
 import javax.websocket.Session;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ServerPresenter {
     private static ServerPresenter presenter = new ServerPresenter();
 
     private ServerViewController viewController;
-    private ServerEndpoint serverEndpoint;
+
+
 
     public static ServerPresenter getInstance() {
         return presenter;
@@ -27,9 +31,6 @@ public class ServerPresenter {
     public void setViewController(ServerViewController viewController) {
         this.viewController = viewController;
     }
-    public void setServerEndpoint(ServerEndpoint serverEndpoint) {
-        this.serverEndpoint = serverEndpoint;
-    }
 
 
 
@@ -38,29 +39,31 @@ public class ServerPresenter {
     }
 
     public void sendObject(String login, Object obj) {
-        serverEndpoint.send(login, obj);
+        ServerController.getInstance().send(login, obj);
     }
 
     public void sendAll(Object obj) {
-        serverEndpoint.sendAll(obj);
+        ServerController.getInstance().sendAll(obj);
     }
     public void sendObject(Session session, Object obj) {
-        serverEndpoint.send(session, obj);
+        ServerController.getInstance().send(session, obj);
     }
 
 
     public void addUser(String login, Session session) {
-        serverEndpoint.addUser(login, session);
-        serverEndpoint.send(login, new LoginIndicatorMsg(true));
+        ServerController.getInstance().addUser(login, session);
+        ServerController.getInstance().send(login, new LoginIndicatorMsg(true));
     }
 
     public void refreshVisualizationUserInfo() {
         Platform.runLater(() ->
                 viewController.refreshData(UserInfoHelper.getInstance().getUserInfoList()));
-        serverEndpoint.sendAll(UserInfoHelper.getInstance());
+        ServerController.getInstance().sendAll(UserInfoHelper.getInstance());
     }
 
-
+    public Map<String, Session> getSessionList() {
+        return ServerController.getInstance().getSessionList();
+    }
 
     public void winner(UserInfo userInfo) {
         userInfo.setWinRate(userInfo.getWinRate() + 1);

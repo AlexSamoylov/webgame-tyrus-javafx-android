@@ -19,11 +19,6 @@ public class ServerEndpoint {
     private static final Logger log = LoggerFactory.getLogger(ServerEndpoint.class);
     ServerMessageHandler serverMessageHandler = new ServerMessageHandler();
 
-    Map<String,Session> sessionList = new HashMap<>();
-    public ServerEndpoint() {
-        ServerPresenter.getInstance().setServerEndpoint(this);
-    }
-
     @OnMessage
     public String onMessage(Session session, String message) {
         log.debug("WebServer received request for: " + message + " being processed for session " + session.getId());
@@ -39,15 +34,16 @@ public class ServerEndpoint {
     @OnClose
     public void onClose(Session session, CloseReason reason) throws IOException {
         String login = null;
-        for (Map.Entry<String, Session> sessionEntry : sessionList.entrySet()) {
+        for (Map.Entry<String, Session> sessionEntry : ServerPresenter.getInstance().getSessionList().entrySet()) {
             if (session.equals(sessionEntry.getValue())) {
                 login = sessionEntry.getKey();
             }
         }
-        sessionList.values().remove(session);
+        ServerPresenter.getInstance().getSessionList().values().remove(session);
         if(login != null) {
             final UserInfoHelper userInfoHelper = UserInfoHelper.getInstance();
-            userInfoHelper.getUserInfoByLogin(login).setIsActive(false);
+            userInfoHelper.getUserInfoByLogin(login).setIsOnline(false);
+            ServerPresenter.getInstance().refreshVisualizationUserInfo();
         }
     }
 
@@ -55,35 +51,4 @@ public class ServerEndpoint {
     public void onError(Session session, Throwable throwable) {
         log.error("WebServer encountered error for session " + session.getId(), throwable);
     }
-
-    public void send(String login, Object object) {
-        try {
-            sessionList.get(login).getBasicRemote().sendText(Message.toStringMessage(object));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void send(Session session, Object object) {
-        try {
-            session.getBasicRemote().sendText(Message.toStringMessage(object));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendAll(Object object) {
-        for (Session session : sessionList.values()) {
-            try {
-                session.getBasicRemote().sendText(Message.toStringMessage(object));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void addUser(String login, Session session) {
-        sessionList.put(login, session);
-    }
-
 }

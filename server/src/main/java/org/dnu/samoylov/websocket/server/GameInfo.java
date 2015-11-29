@@ -58,7 +58,7 @@ public class GameInfo {
             while (!finish) {
                 boolean existUser = false;
                 for (CountSkip user : fullListUsers) {
-                    if (user.userInfo.isActive()) {
+                    if (user.userInfo.isActive()&&user.userInfo.isOnline()) {
                         currentUser = user.userInfo;
                         existUser = true;
                         ServerPresenter.getInstance().sendObject(user.userInfo.getLogin(), new YouStepMsg());
@@ -68,9 +68,13 @@ public class GameInfo {
                         if (!success) {
                             skip(user);
                         } else {
-                            finish = checkFinish(finish, user);
+                            user.skip = 0;
+                            finish = checkFinish(user);
                         }
                         ServerPresenter.getInstance().refreshVisualizationUserInfo();
+                        if (finish) {
+                            break;
+                        }
                     }
                 }
 
@@ -112,12 +116,12 @@ public class GameInfo {
         }
     }
 
-    private boolean checkFinish(boolean finish, CountSkip user) {
+    private boolean checkFinish(CountSkip user) {
         if (user.userInfo.getScore()>= SCORE_FOR_WIN) {
             makeWinner(user.userInfo);
-            finish = true;
+            return true;
         }
-        return finish;
+        return false;
     }
 
     private void makeWinner(UserInfo userInfo) {

@@ -91,13 +91,17 @@ public class ServerViewController implements Initializable {
 
 
 
+    @SuppressWarnings("unchecked")
     private void initTable() {
         tableRating.setEditable(false);
 
+        TableColumn<TableRatingRow, String> onlineColumn = new TableColumn<> ("online");
         TableColumn<TableRatingRow, String> loginColumn = new TableColumn<> ("login");
         TableColumn<TableRatingRow, Integer> scoreColumn = new TableColumn<>("score");
         TableColumn<TableRatingRow, Integer> winRateColumn = new TableColumn<>("win rate");
 
+        onlineColumn.setCellValueFactory(
+                new PropertyValueFactory<>("online"));
         loginColumn.setCellValueFactory(
                 new PropertyValueFactory<>("login"));
         scoreColumn.setCellValueFactory(
@@ -105,13 +109,15 @@ public class ServerViewController implements Initializable {
         winRateColumn.setCellValueFactory(
                 new PropertyValueFactory<>("winRate"));
 
-        loginColumn.setPrefWidth(198);
+        onlineColumn.setPrefWidth(20);
+        loginColumn.setPrefWidth(178);
         scoreColumn.setPrefWidth(50);
         winRateColumn.setPrefWidth(50);
 
         tableRating.setItems(data);
-        tableRating.getColumns().addAll(loginColumn, scoreColumn, winRateColumn);
+        tableRating.getColumns().addAll(onlineColumn, loginColumn, scoreColumn, winRateColumn);
     }
+
 
 
     private final ObservableList<TableRatingRow> data = FXCollections.observableArrayList();
@@ -120,17 +126,14 @@ public class ServerViewController implements Initializable {
         private final SimpleStringProperty login = new SimpleStringProperty();
         private final SimpleIntegerProperty score = new SimpleIntegerProperty();
         private final SimpleIntegerProperty winRate = new SimpleIntegerProperty();
+        private final SimpleStringProperty online = new SimpleStringProperty();
 
-        public TableRatingRow(String login, int score, int winRate) {
-            this.login.set(login);
-            this.score.set(score);
-            this.winRate.set(winRate);
-        }
 
         public TableRatingRow(UserInfo userInfo) {
             this.login.set(userInfo.getLogin());
             this.score.set(userInfo.getScore());
             this.winRate.set(userInfo.getWinRate());
+            this.online.set(userInfo.isOnline()? "✓" : "✘");
         }
 
         public String getLogin() {
@@ -167,6 +170,18 @@ public class ServerViewController implements Initializable {
 
         public void setWinRate(int winRate) {
             this.winRate.set(winRate);
+        }
+
+        public String getOnline() {
+            return online.get();
+        }
+
+        public SimpleStringProperty onlineProperty() {
+            return online;
+        }
+
+        public void setOnline(String online) {
+            this.online.set(online);
         }
     }
 

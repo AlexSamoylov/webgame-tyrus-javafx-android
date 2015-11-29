@@ -40,7 +40,7 @@ public class ClientStartViewController {
     @FXML
     private void connect() {
         messageLabel.setText("");
-        clientService.connect(ip.getText(), login.getText(), event -> messageLabel.setText("1"), event1 -> messageLabel.setText("2"));
+        clientService.connect(ip.getText(), login.getText(), event -> {}, event1 -> {});
     }
 
     @FXML
@@ -50,6 +50,6 @@ public class ClientStartViewController {
     }
 
     public void badLogIn() {
-        messageLabel.setText("bad log in");
+        messageLabel.setText("bad login");
     }
 }

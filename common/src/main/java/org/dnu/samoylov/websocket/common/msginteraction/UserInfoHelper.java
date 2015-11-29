@@ -15,13 +15,17 @@ public class UserInfoHelper {
 
     ArrayList<UserInfo> userInfoList = new ArrayList<>();
 
-    public void createNewUser(String login) {
-            final UserInfo userInfo = getUserInfoByLogin(login);
-            if (userInfo != null) {
-                userInfo.setIsActive(false);
-                return;
+    public boolean createNewUser(String login) {
+        final UserInfo userInfo = getUserInfoByLogin(login);
+        if (userInfo != null) {
+            if(!userInfo.isOnline()) {
+                userInfoHelper.getUserInfoByLogin(login).setIsOnline(true);
+                return true;
             }
+            return false;
+        }
         userInfoList.add(new UserInfo(login));
+        return true;
     }
 
     public void addScore(String login, int scoreDifference) {

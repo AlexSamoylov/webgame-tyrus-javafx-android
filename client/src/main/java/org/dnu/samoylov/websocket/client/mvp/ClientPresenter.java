@@ -57,9 +57,6 @@ public class ClientPresenter {
 
     public void setViewController(ClientStartViewController viewController) {
         this.viewController = viewController;
-        if(clientEndpoint!=null) {
-            sendToServer(new NeedRefreshUserListMsg());
-        }
     }
 
     public void setSuccessLoginAction(Action successLoginAction) {
@@ -68,6 +65,9 @@ public class ClientPresenter {
 
     public void setMainViewController(ClientMainViewController mainViewController) {
         this.mainViewController = mainViewController;
+        if(clientEndpoint!=null) {
+            sendToServer(new NeedRefreshUserListMsg());
+        }
     }
 
     public void setClientEndpoint(ClientEndpoint clientEndpoint) {

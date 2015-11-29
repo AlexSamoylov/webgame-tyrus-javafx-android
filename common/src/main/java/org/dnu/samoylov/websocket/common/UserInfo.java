@@ -5,6 +5,7 @@ public class UserInfo {
     private int score;
     private int winRate;
     private boolean isActive;
+    private boolean isOnline;
 
     public UserInfo() {
     }
@@ -14,6 +15,7 @@ public class UserInfo {
         this.score = 0;
         this.winRate = 0;
         this.isActive = true;
+        this.isOnline = true;
     }
 
     public String getLogin() {
@@ -46,5 +48,13 @@ public class UserInfo {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
     }
 }
