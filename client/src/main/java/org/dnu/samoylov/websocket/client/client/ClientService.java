@@ -2,7 +2,6 @@ package org.dnu.samoylov.websocket.client.client;
 
 import javafx.concurrent.WorkerStateEvent;
 import org.dnu.samoylov.websocket.client.client.task.ConnectionTask;
-import org.dnu.samoylov.websocket.common.msginteraction.message.LoginMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ import javafx.event.EventHandler;
 public class ClientService {
     private static final Logger log = LoggerFactory.getLogger(ClientService.class);
 
-    HelloClientEndpoint clientEndpoint;
+    ClientEndpoint clientEndpoint;
 
     public void connect(String host, String login,
             EventHandler<WorkerStateEvent> onSucceeded, EventHandler<WorkerStateEvent> onFailed) {

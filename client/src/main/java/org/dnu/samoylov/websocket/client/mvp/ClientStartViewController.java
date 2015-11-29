@@ -8,7 +8,7 @@ import org.dnu.samoylov.websocket.client.client.ClientService;
 /**
  * FXML controller for the application.
  */
-public class ClientViewController {
+public class ClientStartViewController {
     @FXML
     private TextField login;
 
@@ -20,9 +20,9 @@ public class ClientViewController {
 
     ClientService clientService = new ClientService();
 
-    public ClientViewController() {
+    public ClientStartViewController() {
         ClientPresenter.getInstance().setViewController(this);
-        ClientPresenter.getInstance().setClientService(clientService);
+
 
     }
 
@@ -49,4 +49,7 @@ public class ClientViewController {
         clientService.sendText("text text text");
     }
 
+    public void badLogIn() {
+        messageLabel.setText("bad log in");
+    }
 }

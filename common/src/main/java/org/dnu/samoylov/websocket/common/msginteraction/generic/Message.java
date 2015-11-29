@@ -22,6 +22,9 @@ public class Message {
 
     public static Message fromString(String message) {
         String[] split = message.split(Message.split);
+        if (split.length == 1) {
+            return new Message(split[0], "");
+        }
         return new Message(split[0], split[1]);
     }
 

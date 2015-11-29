@@ -1,21 +1,17 @@
 package org.dnu.samoylov.websocket.common.msginteraction.generic;
 
+import com.google.gson.Gson;
+
 import javax.websocket.Session;
-import java.util.HashMap;
-import java.util.Map;
 
-public abstract class MessageHandler {
-    private final Map<String, Handler> handleMap = new HashMap<>();
+public abstract class MessageHandler<T> {
+    private Gson gson = new Gson();
 
-    public MessageHandler() {
-        initHandleMap(handleMap);
+    public final void run(Session session, String message) {
+        final T object = gson.fromJson(message, getMessageClass());
+        handle(session, object);
     }
 
-    protected abstract void initHandleMap(Map<String, Handler> handleMap);
-
-    public final void handle(Session session, String message) {
-        final Message msg = Message.fromString(message);
-        handleMap.get(msg.className).run(session, msg.data);
-    }
-
+    public abstract Class<T> getMessageClass();
+    protected abstract void handle(Session session, T object);
 }

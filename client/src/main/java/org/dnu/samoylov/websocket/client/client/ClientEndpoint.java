@@ -1,5 +1,7 @@
 package org.dnu.samoylov.websocket.client.client;
 
+import org.dnu.samoylov.websocket.client.client.msginteraction.ClientMessageHandler;
+import org.dnu.samoylov.websocket.client.mvp.ClientPresenter;
 import org.dnu.samoylov.websocket.common.msginteraction.generic.Message;
 import org.dnu.samoylov.websocket.common.msginteraction.message.LoginMessage;
 import org.slf4j.Logger;
@@ -7,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.websocket.*;
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * WebSocket client endpoint to the hello service.
@@ -22,46 +23,37 @@ import java.util.concurrent.CountDownLatch;
  * This endpoint is structured to only be used once per client connection.
  * (i.e. create a new endpoint instance for every client connection).
  */
-@ClientEndpoint
-public class HelloClientEndpoint {
-    private static final Logger log = LoggerFactory.getLogger(HelloClientEndpoint.class);
+@javax.websocket.ClientEndpoint
+public class ClientEndpoint {
+    private static final Logger log = LoggerFactory.getLogger(ClientEndpoint.class);
 
     private final String login;
-    private       String response;
-    private       Throwable exception;
 
-    private final CountDownLatch messageLatch = new CountDownLatch(1);
+    ClientMessageHandler messageHandler = new ClientMessageHandler();
 
-    private static final int REQUEST_TIMEOUT_SECS = 10;
     Session session;
-    public HelloClientEndpoint(String login) {
+    public ClientEndpoint(String login) {
         this.login = login;
     }
 
     @OnOpen
     public void onOpen(Session session) {
-            this.session = session;
-            log.debug("Sending request: '" + login + "' with session " + session.getId());
+        this.session = session;
+        ClientPresenter.getInstance().setClientEndpoint(this);
 
-            sendObject(new LoginMessage(login));
+        log.debug("Sending request: '" + login + "' with session " + session.getId());
+
+        sendObject(new LoginMessage(login));
     }
 
     @OnMessage
-    public void processResponse(Session session, String message) {
-        log.debug("Received response: '" + message + "' for request: '" + login + "' with session " + session.getId());
-
-        if(this.session != session) {
-            this.session = session;
-        }
-        response = message;
-        messageLatch.countDown();
+    public void onMessage(Session session, String message) {
+        messageHandler.handle(session, message);
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
         log.error("Communication error, saying hello to '" + login + "' with session " + session.getId(), throwable);
-        exception = throwable;
-        messageLatch.countDown();
 
         this.session = null;
     }
