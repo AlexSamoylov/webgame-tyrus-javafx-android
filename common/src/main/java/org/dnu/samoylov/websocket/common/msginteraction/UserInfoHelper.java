@@ -3,6 +3,7 @@ package org.dnu.samoylov.websocket.common.msginteraction;
 import org.dnu.samoylov.websocket.common.UserInfo;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class UserInfoHelper {
     static UserInfoHelper userInfoHelper = new UserInfoHelper();
@@ -15,7 +16,12 @@ public class UserInfoHelper {
     ArrayList<UserInfo> userInfoList = new ArrayList<>();
 
     public void createNewUser(String login) {
-        userInfoList.add(new UserInfo(login, 0, 0));
+            final UserInfo userInfo = getUserInfoByLogin(login);
+            if (userInfo != null) {
+                userInfo.setIsActive(false);
+                return;
+            }
+        userInfoList.add(new UserInfo(login));
     }
 
     public void addScore(String login, int scoreDifference) {
@@ -29,7 +35,14 @@ public class UserInfoHelper {
     }
 
     public UserInfo getUserInfoByLogin(String login) {
-        return userInfoList.stream().findFirst().filter(userInfo -> userInfo.getLogin().equals(login)).get();
+        if(userInfoList.size()==0) {
+            return null;
+        }
+        try {
+            return userInfoList.stream().findFirst().filter(userInfo -> userInfo.getLogin().equals(login)).get();
+        } catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     public ArrayList<UserInfo> getUserInfoList() {

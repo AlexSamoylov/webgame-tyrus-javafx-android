@@ -8,8 +8,9 @@
    <children>
          <Label fx:id="serverIp" layoutX="312.0" layoutY="14.0" text="SERVER:" />
          <ListView fx:id="loglist" layoutX="300.0" layoutY="109.0" prefHeight="314.0" prefWidth="341.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <Button layoutX="522.0" layoutY="10.0" mnemonicParsing="false" onAction="#btn" text="Button" />
+      <Button fx:id="startBtn" layoutX="320.0" layoutY="52.0" mnemonicParsing="false" onAction="#start" prefHeight="49.0" prefWidth="87.0" text="START" />
 
        <TableView fx:id="tableRating" layoutX="4.0" prefHeight="366.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label fx:id="whoLabel" layoutX="442.0" layoutY="68.0" text="Ходит:" />
    </children>
 </AnchorPane>

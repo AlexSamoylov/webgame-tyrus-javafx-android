@@ -3,6 +3,7 @@ package org.dnu.samoylov.websocket.server.mvp;
 import javafx.application.Platform;
 import org.dnu.samoylov.websocket.common.UserInfo;
 import org.dnu.samoylov.websocket.common.msginteraction.UserInfoHelper;
+import org.dnu.samoylov.websocket.common.msginteraction.message.FinishGame;
 import org.dnu.samoylov.websocket.common.msginteraction.message.LoginIndicatorMsg;
 import org.dnu.samoylov.websocket.server.server.ServerEndpoint;
 
@@ -39,6 +40,10 @@ public class ServerPresenter {
     public void sendObject(String login, Object obj) {
         serverEndpoint.send(login, obj);
     }
+
+    public void sendAll(Object obj) {
+        serverEndpoint.sendAll(obj);
+    }
     public void sendObject(Session session, Object obj) {
         serverEndpoint.send(session, obj);
     }
@@ -50,7 +55,27 @@ public class ServerPresenter {
     }
 
     public void refreshVisualizationUserInfo() {
-        viewController.refreshData(UserInfoHelper.getInstance().getUserInfoList());
+        Platform.runLater(() ->
+                viewController.refreshData(UserInfoHelper.getInstance().getUserInfoList()));
         serverEndpoint.sendAll(UserInfoHelper.getInstance());
+    }
+
+
+
+    public void winner(UserInfo userInfo) {
+        userInfo.setWinRate(userInfo.getWinRate() + 1);
+        sendAll(new FinishGame(false, userInfo.getLogin()));
+
+        goToStopGameState(true);
+    }
+
+    public void errorGame() {
+        sendAll(new FinishGame(false, ""));
+
+        goToStopGameState(false);
+    }
+
+    private void goToStopGameState(boolean wasFullGame) {
+        Platform.runLater(() -> viewController.stopGame(wasFullGame));
     }
 }

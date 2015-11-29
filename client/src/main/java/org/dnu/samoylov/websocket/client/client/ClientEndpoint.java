@@ -78,4 +78,8 @@ public class ClientEndpoint {
             e.printStackTrace();
         }
     }
+
+    public String getLogin() {
+        return login;
+    }
 }

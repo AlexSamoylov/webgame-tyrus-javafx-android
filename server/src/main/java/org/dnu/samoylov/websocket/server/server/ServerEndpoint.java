@@ -38,8 +38,17 @@ public class ServerEndpoint {
 
     @OnClose
     public void onClose(Session session, CloseReason reason) throws IOException {
-        session.getBasicRemote().sendText("onClose");
+        String login = null;
+        for (Map.Entry<String, Session> sessionEntry : sessionList.entrySet()) {
+            if (session.equals(sessionEntry.getValue())) {
+                login = sessionEntry.getKey();
+            }
+        }
         sessionList.values().remove(session);
+        if(login != null) {
+            final UserInfoHelper userInfoHelper = UserInfoHelper.getInstance();
+            userInfoHelper.getUserInfoByLogin(login).setIsActive(false);
+        }
     }
 
     @OnError

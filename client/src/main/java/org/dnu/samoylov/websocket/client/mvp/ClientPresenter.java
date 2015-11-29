@@ -22,6 +22,9 @@ public class ClientPresenter {
 
 
 
+    public String getLogin() {
+        return clientEndpoint.getLogin();
+    }
 
     public void checkLogIn(LoginIndicatorMsg indicator) {
         if (indicator.isLogin()) {
@@ -33,7 +36,7 @@ public class ClientPresenter {
 
     public void refreshVisualizationUserInfo() {
         if(mainViewController!=null) {
-            mainViewController.refreshData(UserInfoHelper.getInstance().getUserInfoList());
+            Platform.runLater(() -> mainViewController.refreshData(UserInfoHelper.getInstance().getUserInfoList()));
         }
     }
 
@@ -72,6 +75,37 @@ public class ClientPresenter {
         if(mainViewController!=null) {
             sendToServer(new NeedRefreshUserListMsg());
         }
+    }
+
+    public void myStepStart() {
+        Platform.runLater(mainViewController::myStepStart);
+    }
+
+    public void receiveScore(int score) {
+        StringBuilder s = new StringBuilder();
+        s.append("выброшено ");
+        s.append(String.valueOf(score));
+        switch (score) {
+            case 1: s.append(" =(");
+                break;
+            case 6: s.append(" -_-");
+                break;
+            case 5: s.append("!!!");
+                break;
+            default:
+                s.append(".");
+                break;
+        }
+
+        Platform.runLater(() -> mainViewController.addInLog(s.toString()));
+    }
+
+    public void finishGame(boolean isWinner) {
+        Platform.runLater(() -> mainViewController.finishGame(isWinner));
+    }
+
+    public void startGame() {
+        Platform.runLater(mainViewController::startGame);
     }
 
 

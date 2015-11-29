@@ -4,14 +4,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.dnu.samoylov.websocket.common.UserInfo;
+import org.dnu.samoylov.websocket.server.GameInfo;
 
 import java.net.InetAddress;
 import java.net.URL;
@@ -23,7 +22,13 @@ import java.util.stream.Collectors;
 public class ServerViewController implements Initializable {
 
     @FXML
+    Label whoLabel;
+    @FXML
     Label serverIp;
+
+    @FXML
+    Button startBtn;
+
     @FXML
     ListView<String> loglist;
 
@@ -36,6 +41,9 @@ public class ServerViewController implements Initializable {
 
     public void addInLog(String row) {
         loglist.getItems().add(row);
+        final int index = loglist.getItems().size() - 1;
+        loglist.scrollTo(index);
+        loglist.getSelectionModel().select(index);
     }
 
     public void refreshData(Collection<UserInfo> userInfoCollection) {
@@ -48,6 +56,19 @@ public class ServerViewController implements Initializable {
         addInLog("btn");
     }
 
+    @FXML
+    public void start() {
+        startBtn.setText("in process");
+        startBtn.setDisable(true);
+
+        GameInfo.getInstance().startGame();
+    }
+
+    public void stopGame(boolean wasFullGame) {
+        startBtn.setDisable(false);
+        startBtn.setText("START");
+        whoLabel.setText(wasFullGame ? "success game" : "fail game");
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -59,7 +80,7 @@ public class ServerViewController implements Initializable {
         try {
             InetAddress iAddress = InetAddress.getLocalHost();
             String currentIp = iAddress.getHostAddress();
-            serverIp.setText("SERVER: " + iAddress);
+            serverIp.setText("SERVER: " + currentIp);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

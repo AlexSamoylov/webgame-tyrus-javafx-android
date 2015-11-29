@@ -14,12 +14,17 @@
       <TableView fx:id="tableRating" layoutX="7.0" layoutY="7.0" prefHeight="366.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
 
       <ListView fx:id="loglist" layoutX="300.0" layoutY="109.0" prefHeight="174.0" prefWidth="290.0" AnchorPane.bottomAnchor="0.0" />
-      <Button layoutX="343.0" layoutY="175.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="204.0" text="Бросить" />
-      <ProgressIndicator layoutX="364.0" layoutY="14.0" prefHeight="127.0" prefWidth="160.0" progress="0.0" />
+      <Button fx:id="rollTheDice" layoutX="343.0" layoutY="175.0" mnemonicParsing="false" onAction="#roll" prefHeight="44.0" prefWidth="204.0" text="Бросить" visible="false" />
+      <ProgressIndicator fx:id="timeProgress" layoutX="364.0" layoutY="14.0" prefHeight="127.0" prefWidth="160.0" progress="0.0" />
       <Ellipse fill="#d1da6a82" layoutX="341.0" layoutY="263.0" radiusX="43.0" radiusY="22.0" stroke="BLACK" strokeType="INSIDE" />
       <Label fx:id="myScoreIndicator" alignment="CENTER" layoutX="310.0" layoutY="250.0" prefHeight="26.0" prefWidth="62.0" text="0/100" textAlignment="CENTER" textOverrun="WORD_ELLIPSIS">
          <font>
             <Font size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="gameResult" alignment="CENTER" layoutX="299.0" layoutY="175.0" prefHeight="49.0" prefWidth="290.0" text="ТЫ ВЫИГРАЛ!!!" textAlignment="CENTER" visible="false">
+         <font>
+            <Font size="33.0" />
          </font>
       </Label>
 
